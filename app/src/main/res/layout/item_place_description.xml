@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_gravity="center|center_horizontal"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp">
+
+
+    <ImageButton
+        android:id="@+id/item_description_like"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/like_dislike_selector"
+        android:contentDescription="@string/like"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_like"/>
+
+    <ImageButton
+        android:id="@+id/item_description_dislike"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/like_dislike_selector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_dislike"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/topicTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Restaurant"
+        app:layout_constraintEnd_toStartOf="@+id/item_description_dislike"
+        app:layout_constraintStart_toEndOf="@+id/item_description_like"
+        app:layout_constraintTop_toBottomOf="@+id/item_description_rating"/>
+
+    <TextView
+        android:id="@+id/item_description_rating"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/oval_off"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="8.9"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/item_description_dislike"
+        app:layout_constraintStart_toEndOf="@+id/item_description_like"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/item_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:text="@string/lorem_ipsum"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name"/>
+
+
+    <LinearLayout
+        android:id="@+id/layout_left_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_comment_rect"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/item_description">
+
+        <ImageButton
+            android:id="@+id/left_comment_button"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/cardViewColor"
+            android:src="@drawable/button_comment_selector"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/left_comment"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">UfaBurgersApp</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="best_burgers">Лучшие бургерные</string>
+    <string name="new_burgers">Новые бургерные</string>
+    <string name="all_burgers">Все бургерные города</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyDco3Ii5KD3K2APbKul2wHPOqTOUl_w_5g</string>
+    <string name="show_on_map">Показать на карте</string>
+    <string name="show_photo">Посмотреть фото</string>
+    <string name="fav_places">Любимые заведения</string>
+    <string name="share">Поделиться</string>
+    <string name="callback">Обратная связь</string>
+    <string name="location_description">UfaBurgersApp использует позиционные данные для поиска близлежащих ресторанов</string>
+    <string name="permission_granted">Permission Granted</string>
+    <string name="connection_failed">Connection Failed</string>
+    <string name="like">Like</string>
+    <string name="left_comment">Оставить рецензию</string>
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Aenean sit amet dapibus quam. Proin nec sapien sit amet magna sodales fermentum.
+        Nullam semper sit amet mauris at eleifend.</string>
+</resources>

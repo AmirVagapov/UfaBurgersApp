@@ -1,12 +1,17 @@
 package com.vagapov.amir.ufaburgersapp.model;
 
 
-import android.location.Location;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
-import java.util.Observable;
 
 public class PlacesLocationObservable {
 
-    //public static Observable<Location> getLocation{}
+    public static Observable<Burgers> getPlaces(){
+        return Observable.defer(() -> Observable.from(MockBurgersList.mockPlacelist()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    app:layout_scrollFlags="scroll|enterAlways">
+    app:layout_scrollFlags="exitUntilCollapsed">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimaryDark"
         android:minHeight="?attr/actionBarSize"
-        app:layout_scrollFlags="scroll|enterAlways"
+        app:layout_scrollFlags="exitUntilCollapsed"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 

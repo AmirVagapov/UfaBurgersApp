@@ -31,7 +31,7 @@
 
         <TextView
             style="@style/topicTextStyle"
-            android:text="@string/new_burgers"/>
+            android:text="@string/fav_places"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/new_recycler_view"

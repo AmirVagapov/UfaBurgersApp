@@ -25,4 +25,10 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="grayLine">
+        <item name="android:background">@color/darkGreyBackground</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
 </resources>

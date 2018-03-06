@@ -15,11 +15,12 @@
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="44dp"
-        android:background="@drawable/like_dislike_selector"
+        android:background="@drawable/like_selector"
         android:contentDescription="@string/like"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_like"/>
+        app:srcCompat="@drawable/ic_like"
+        tools:ignore="VectorDrawableCompat"/>
 
     <ImageButton
         android:id="@+id/item_description_dislike"
@@ -27,10 +28,11 @@
         android:layout_height="40dp"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="44dp"
-        android:background="@drawable/like_dislike_selector"
+        android:background="@drawable/dislike_selector"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_dislike"/>
+        app:srcCompat="@drawable/ic_dislike"
+        tools:ignore="VectorDrawableCompat"/>
 
     <TextView
         android:id="@+id/tv_name"

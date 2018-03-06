@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.vagapov.amir.ufaburgersapp.R;
 import com.vagapov.amir.ufaburgersapp.model.Burgers;
-import com.vagapov.amir.ufaburgersapp.model.Place;
 
 import java.util.ArrayList;
 
@@ -21,11 +20,8 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceHolde
 
     private ArrayList<Burgers> places;
 
-    private FragmentClickInterface fragmentClickInterface;
+    private FragmentClickOpenPlaceInterface mFragmentClickOpenPlaceInterface;
 
-    public void setFragmentClickInterface(FragmentClickInterface fragmentClickInterface) {
-        this.fragmentClickInterface = fragmentClickInterface;
-    }
 
     PlacesAdapter(ArrayList<Burgers> places) {
         this.places = places;
@@ -34,12 +30,13 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceHolde
     @Override
     public PlaceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_list, parent, false);
+        mFragmentClickOpenPlaceInterface = (FragmentClickOpenPlaceInterface) parent.getContext();
         return new PlaceHolder(v);
     }
 
     @Override
     public void onBindViewHolder(PlaceHolder holder, int position) {
-        Burgers place = new Burgers(places.get(position).getName());
+        Burgers place = places.get(position);
         holder.bind(place);
     }
 
@@ -55,7 +52,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceHolde
         @BindView(R.id.item_places_name)
         TextView name;
 
-        Burgers place;
+        private Burgers place;
 
 
         PlaceHolder(View itemView) {
@@ -73,7 +70,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceHolde
 
         @Override
         public void onClick(View view) {
-            fragmentClickInterface
+            mFragmentClickOpenPlaceInterface
                     .openFragment(PlaceDescriptionFragment.newInstance(place));
         }
     }

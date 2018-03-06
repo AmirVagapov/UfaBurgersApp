@@ -2,7 +2,6 @@ package com.vagapov.amir.ufaburgersapp;
 
 
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -19,14 +18,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.vagapov.amir.ufaburgersapp.view.FragmentClickInterface;
+import com.vagapov.amir.ufaburgersapp.view.FragmentClickOpenPlaceInterface;
+import com.vagapov.amir.ufaburgersapp.view.MapFragment;
 import com.vagapov.amir.ufaburgersapp.view.PlacesFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends SingleFragmentActivity implements
-        NavigationView.OnNavigationItemSelectedListener{
+        NavigationView.OnNavigationItemSelectedListener, FragmentClickOpenPlaceInterface{
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer_layout;
@@ -38,7 +38,6 @@ public class MainActivity extends SingleFragmentActivity implements
     NavigationView nav_view;
 
     private ActionBarDrawerToggle toggle;
-    private FragmentManager fm;
 
     @Override
     @IdRes
@@ -116,8 +115,7 @@ public class MainActivity extends SingleFragmentActivity implements
         drawer_layout.closeDrawer(GravityCompat.START);
         switch (item.getItemId()){
             case R.id.nav_show_on_map:
-                Intent intent = new Intent(this, MapActivity.class);
-                startActivity(intent);
+                openFragment(MapFragment.newInstance());
                 return true;
             case R.id.nav_show_photo:
                 Toast.makeText(this, "Show photo", Toast.LENGTH_SHORT).show();
@@ -140,4 +138,8 @@ public class MainActivity extends SingleFragmentActivity implements
 
     }
 
+    @Override
+    public void openFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.container, fragment).commit();
+    }
 }

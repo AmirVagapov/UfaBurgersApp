@@ -23,4 +23,9 @@
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Aenean sit amet dapibus quam. Proin nec sapien sit amet magna sodales fermentum.
         Nullam semper sit amet mauris at eleifend.</string>
+    <string name="google_intent_package">com.google.android.apps.maps</string>
+    <string name="location_loaded">Локации загружены</string>
+    <string name="add_to_favourite">Добавить в любимые</string>
+    <string name="your_location">Вы здесь</string>
+    <string name="total">Всего</string>
 </resources>

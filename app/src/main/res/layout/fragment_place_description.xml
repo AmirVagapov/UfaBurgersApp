@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    xmlns:map="http://schemas.android.com/tools"
     android:background="@color/cardViewColor"
     android:layout_height="match_parent">
 
@@ -19,6 +20,7 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:layout_scrollInterpolator="@android:anim/decelerate_interpolator"
             app:toolbarId="@+id/toolbar">
+
 
             <ImageView
                 android:id="@+id/place_detail_toolbar_photo"
@@ -59,10 +61,15 @@
 
             </android.support.v7.widget.CardView>
 
+            <com.vagapov.amir.ufaburgersapp.view.MyFrame
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                android:id="@+id/map_frame_description">
         <com.google.android.gms.maps.MapView
             android:id="@+id/description_map"
             android:layout_width="match_parent"
-            android:layout_height="240dp"/>
+            android:layout_height="match_parent"/>
+            </com.vagapov.amir.ufaburgersapp.view.MyFrame>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

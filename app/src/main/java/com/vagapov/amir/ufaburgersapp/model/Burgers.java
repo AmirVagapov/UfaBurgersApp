@@ -3,9 +3,13 @@ package com.vagapov.amir.ufaburgersapp.model;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Burgers implements Place, Serializable {
+
 
     private String name;
     private String address;
@@ -14,11 +18,21 @@ public class Burgers implements Place, Serializable {
     private String description;
     private String site;
     private String photo;
-    private Location location;
+    private transient LatLng latLng;
 
-    public Burgers(String name) {
-        this.name = name;
+    public LatLng getLatLng() {
+        return latLng;
     }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
+    public Burgers(String name, LatLng latLng) {
+        this.name = name;
+        this.latLng = latLng;
+    }
+
 
     public String getName() {
         return name;

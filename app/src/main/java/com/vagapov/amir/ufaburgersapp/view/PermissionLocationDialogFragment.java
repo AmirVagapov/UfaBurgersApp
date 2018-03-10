@@ -11,15 +11,14 @@ import android.support.v7.app.AlertDialog;
 
 import com.vagapov.amir.ufaburgersapp.R;
 
-public class PermissionDialogFragment extends DialogFragment {
+public class PermissionLocationDialogFragment extends DialogFragment {
 
-    public static PermissionDialogFragment newInstance() {
-       return new PermissionDialogFragment();
+    @NonNull
+    public static PermissionLocationDialogFragment newInstance() {
+       return new PermissionLocationDialogFragment();
     }
 
-
-
-    public PermissionDialogFragment() {
+    public PermissionLocationDialogFragment() {
     }
 
     interface RequestInterface{

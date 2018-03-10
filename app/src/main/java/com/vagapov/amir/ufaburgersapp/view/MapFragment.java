@@ -8,7 +8,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -17,31 +16,25 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vagapov.amir.ufaburgersapp.R;
-import com.vagapov.amir.ufaburgersapp.model.Burgers;
-import com.vagapov.amir.ufaburgersapp.model.PlacesLocationObservable;
-
-import java.util.ArrayList;
+import com.vagapov.amir.ufaburgersapp.model.PlacesModelImpl;
 
 
 import rx.Subscription;
 
-import static com.vagapov.amir.ufaburgersapp.model.MockBurgersList.mockPlacelist;
+
 
 public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap map;
     private Location currentLocation;
-    private PermissionDialogFragment permissionDialog;
+    private PermissionLocationDialogFragment permissionDialog;
     private Subscription subscription;
     private FragmentClickOpenPlaceInterface mFragmentClickOpenPlaceInterface;
-
-
 
     private static final String[] LOCATION_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -79,7 +72,7 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
     }
 
     private void createPermissionDialog() {
-        permissionDialog = PermissionDialogFragment.newInstance();
+        permissionDialog = PermissionLocationDialogFragment.newInstance();
         permissionDialog.setContext(getActivity());
         permissionDialog
                 .setRequestInterface(() ->
@@ -125,31 +118,35 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
     }
 
     private void addPlacesOnMap() {
-        subscription = PlacesLocationObservable
+        subscription = new PlacesModelImpl()
                 .getPlaces()
-                .subscribe(burgers -> {
+                .subscribe(place -> {
                     MarkerOptions marker = new MarkerOptions()
-                            .position(burgers.getLatLng())
-                            .title(burgers.getName())
+                            .position(place.getLatLng())
+                            .title(place.getName())
                             .snippet("Узнать подробнее");
                     Marker m = map.addMarker(marker);
                     m.showInfoWindow();
-                }, throwable -> Toast.makeText(getActivity(), throwable.getMessage(), Toast.LENGTH_SHORT).show(),
-                        ()->{
-                            LatLng myLocation = new LatLng(currentLocation.getLatitude(),
-                                    currentLocation.getLongitude());
-                            MarkerOptions markerOptions = new MarkerOptions()
-                                    .position(myLocation)
-                                    .title(getString(R.string.your_location))
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                                    .zIndex(1.0f);
-                            Marker marker = map.addMarker(markerOptions);
-                            marker.showInfoWindow();
-                            CameraUpdate cameraUpdate = CameraUpdateFactory
-                                    .newLatLngZoom(myLocation, 13.0f);
-                            map.animateCamera(cameraUpdate);
-                            Toast.makeText(getActivity(), R.string.location_loaded, Toast.LENGTH_SHORT).show();
-                        });
+                }, throwable -> Toast.makeText(getActivity(),
+                        throwable.getMessage(),
+                        Toast.LENGTH_SHORT).show(),
+                        this::postMarkers);
+    }
+
+    private void postMarkers() {
+        LatLng myLocation = new LatLng(currentLocation.getLatitude(),
+                currentLocation.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions()
+                .position(myLocation)
+                .title(getString(R.string.your_location))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                .zIndex(1.0f);
+        Marker marker = map.addMarker(markerOptions);
+        marker.showInfoWindow();
+        CameraUpdate cameraUpdate = CameraUpdateFactory
+                .newLatLngZoom(myLocation, 13.0f);
+        map.animateCamera(cameraUpdate);
+        Toast.makeText(getActivity(), R.string.location_loaded, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -184,9 +181,9 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
     @Override
     public void onInfoWindowClick(Marker marker) {
         String title = marker.getTitle();
-        PlacesLocationObservable.getPlaces()
-                .filter( burgers -> burgers.getName().equals(title))
-                .subscribe(burgers -> mFragmentClickOpenPlaceInterface
-                        .openFragment(PlaceDescriptionFragment.newInstance(burgers)));
+        new PlacesModelImpl().getPlaces()
+                .filter( place -> place.getName().equals(title))
+                .subscribe(place -> mFragmentClickOpenPlaceInterface
+                        .openFragment(PlaceDescriptionFragment.newInstance(place)));
     }
 }

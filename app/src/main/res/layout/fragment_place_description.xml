@@ -61,15 +61,15 @@
 
             </android.support.v7.widget.CardView>
 
-            <com.vagapov.amir.ufaburgersapp.view.MyFrame
+            <com.vagapov.amir.ufaburgersapp.view.FrameForMapDescription
                 android:layout_width="match_parent"
-                android:layout_height="240dp"
+                android:layout_height="match_parent"
                 android:id="@+id/map_frame_description">
         <com.google.android.gms.maps.MapView
             android:id="@+id/description_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-            </com.vagapov.amir.ufaburgersapp.view.MyFrame>
+            </com.vagapov.amir.ufaburgersapp.view.FrameForMapDescription>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

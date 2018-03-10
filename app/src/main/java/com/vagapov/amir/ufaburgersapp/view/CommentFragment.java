@@ -9,14 +9,15 @@ import android.view.ViewGroup;
 
 import com.vagapov.amir.ufaburgersapp.R;
 import com.vagapov.amir.ufaburgersapp.model.Burgers;
+import com.vagapov.amir.ufaburgersapp.model.Place;
 
 
 public class CommentFragment extends Fragment {
     private static final String ARGS = "place";
-    private Burgers place;
+    private Place place;
 
 
-    public static CommentFragment newInstance(Burgers place) {
+    public static CommentFragment newInstance(Place place) {
         Bundle args = new Bundle();
         args.putSerializable(ARGS, place);
         CommentFragment fragment = new CommentFragment();

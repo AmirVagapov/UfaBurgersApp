@@ -22,6 +22,7 @@
     <string name="left_comment">Оставить рецензию</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Aenean sit amet dapibus quam. Proin nec sapien sit amet magna sodales fermentum.
+        Nullam semper sit amet mauris at eleifend.Proin nec sapien sit amet magna sodales fermentum.
         Nullam semper sit amet mauris at eleifend.</string>
     <string name="google_intent_package">com.google.android.apps.maps</string>
     <string name="location_loaded">Локации загружены</string>

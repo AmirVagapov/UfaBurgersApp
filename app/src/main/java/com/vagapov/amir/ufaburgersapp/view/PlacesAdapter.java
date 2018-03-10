@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.vagapov.amir.ufaburgersapp.R;
 import com.vagapov.amir.ufaburgersapp.model.Burgers;
+import com.vagapov.amir.ufaburgersapp.model.Place;
 
 import java.util.ArrayList;
 
@@ -18,31 +19,39 @@ import butterknife.ButterKnife;
 
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceHolder> {
 
-    private ArrayList<Burgers> places;
+    private ArrayList<Place> places;
 
     private FragmentClickOpenPlaceInterface mFragmentClickOpenPlaceInterface;
 
 
-    PlacesAdapter(ArrayList<Burgers> places) {
-        this.places = places;
+
+    public void setPlaces(ArrayList<Place> list){
+        places = list;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Place> getPlaces(){
+        return places;
     }
 
     @Override
     public PlaceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler_list, parent, false);
+        View v = LayoutInflater
+                .from(parent.getContext())
+                .inflate(R.layout.item_recycler_list, parent, false);
         mFragmentClickOpenPlaceInterface = (FragmentClickOpenPlaceInterface) parent.getContext();
         return new PlaceHolder(v);
     }
 
     @Override
     public void onBindViewHolder(PlaceHolder holder, int position) {
-        Burgers place = places.get(position);
+        Place place = places.get(position);
         holder.bind(place);
     }
 
     @Override
     public int getItemCount() {
-        return places.size();
+        return places == null ? 0 : places.size();
     }
 
     class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -52,7 +61,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceHolde
         @BindView(R.id.item_places_name)
         TextView name;
 
-        private Burgers place;
+        private Place place;
 
 
         PlaceHolder(View itemView) {
@@ -63,7 +72,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceHolde
             name = itemView.findViewById(R.id.item_places_name);
         }
 
-        void bind(Burgers place) {
+        void bind(Place place) {
             this.place = place;
             name.setText(place.getName());
         }

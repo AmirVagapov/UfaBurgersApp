@@ -12,9 +12,7 @@ import android.widget.FrameLayout;
 
 
 
-public class MyFrame extends FrameLayout {
-
-
+public class FrameForMapDescription extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -27,20 +25,16 @@ public class MyFrame extends FrameLayout {
         return false;
     }
 
-    public MyFrame(@NonNull Context context) {
+    public FrameForMapDescription(@NonNull Context context) {
         super(context);
     }
 
-    public MyFrame(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public FrameForMapDescription(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public MyFrame(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public FrameForMapDescription(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public MyFrame(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
 }

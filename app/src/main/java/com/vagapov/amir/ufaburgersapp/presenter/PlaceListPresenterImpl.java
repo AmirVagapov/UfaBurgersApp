@@ -5,12 +5,12 @@ import android.support.annotation.NonNull;
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.vagapov.amir.ufaburgersapp.model.Place;
 import com.vagapov.amir.ufaburgersapp.model.PlacesModel;
-import com.vagapov.amir.ufaburgersapp.view.PlaceListView;
+import com.vagapov.amir.ufaburgersapp.presenter.interfaces.PlaceListPresenter;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.PlaceListView;
 
 import java.util.ArrayList;
 
 import rx.Subscription;
-import rx.functions.Action1;
 
 
 public class PlaceListPresenterImpl extends MvpBasePresenter<PlaceListView>
@@ -65,8 +65,8 @@ public class PlaceListPresenterImpl extends MvpBasePresenter<PlaceListView>
                         list.add(burgers);
                         return list;
                     }).subscribe(this::setDataOnView,
-                            this::setDataOnView,
-                            () -> getView().showContent());
+                            this::setDataOnView/*,
+                            () -> getView().showContent()*/);
         }
     }
 
@@ -84,6 +84,7 @@ public class PlaceListPresenterImpl extends MvpBasePresenter<PlaceListView>
         PlaceListView view = getView();
         if(isViewAttached()){
             view.setData(list);
+            view.showContent();
         }
     }
 
@@ -91,6 +92,7 @@ public class PlaceListPresenterImpl extends MvpBasePresenter<PlaceListView>
         PlaceListView view = getView();
         if(isViewAttached()){
             view.showError(throwable, false);
+            view.showContent();
         }
     }
 

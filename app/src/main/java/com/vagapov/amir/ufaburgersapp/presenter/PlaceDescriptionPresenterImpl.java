@@ -1,20 +1,17 @@
 package com.vagapov.amir.ufaburgersapp.presenter;
 
 
-import android.support.v4.app.Fragment;
-
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.vagapov.amir.ufaburgersapp.model.Place;
-import com.vagapov.amir.ufaburgersapp.view.FragmentClickOpenPlaceInterface;
-import com.vagapov.amir.ufaburgersapp.view.PlaceDescriptionView;
+import com.vagapov.amir.ufaburgersapp.presenter.interfaces.PlaceDescriptionPresenter;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.PlaceDescriptionView;
 
 import java.text.DecimalFormat;
 
 public class PlaceDescriptionPresenterImpl extends MvpBasePresenter<PlaceDescriptionView>
-        implements PlaceDescriptionPresenter{
+        implements PlaceDescriptionPresenter {
 
     private Place place;
-    private FragmentClickOpenPlaceInterface openInterface;
     private PlaceDescriptionView view;
 
     @Override
@@ -23,16 +20,10 @@ public class PlaceDescriptionPresenterImpl extends MvpBasePresenter<PlaceDescrip
         this.view = view;
     }
 
-    public PlaceDescriptionPresenterImpl(Place place, FragmentClickOpenPlaceInterface openInterface) {
+    public PlaceDescriptionPresenterImpl(Place place) {
         this.place = place;
-        this.openInterface = openInterface;
     }
 
-
-    @Override
-    public void openCommentFragment(Fragment fragment) {
-        openInterface.openFragment(fragment);
-    }
 
     @Override
     public void setPlacesFavourite() {
@@ -47,6 +38,7 @@ public class PlaceDescriptionPresenterImpl extends MvpBasePresenter<PlaceDescrip
         String rating = new DecimalFormat("#0.0")
                 .format(place.getRating() + 0.1f);
         view.setRating(rating);
+        view.setName(place.getName());
     }
 
     @Override

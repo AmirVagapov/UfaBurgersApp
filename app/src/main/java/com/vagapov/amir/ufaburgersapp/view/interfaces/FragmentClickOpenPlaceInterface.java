@@ -1,4 +1,4 @@
-package com.vagapov.amir.ufaburgersapp.view;
+package com.vagapov.amir.ufaburgersapp.view.interfaces;
 
 
 import android.support.v4.app.Fragment;

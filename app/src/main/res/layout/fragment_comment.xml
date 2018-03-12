@@ -7,56 +7,83 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:background="@color/cardViewColor"
+        android:id="@+id/linear_layout_header_comment"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@color/cardViewColor"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginBottom="24dp">
+        app:layout_constraintBottom_toTopOf="@+id/container_recycler_view_comment">
 
         <Button
-            android:background="@color/cardViewColor"
-            android:text="@string/total"
+            style="?android:borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".33"/>
+            android:layout_weight=".29"
+            android:background="@color/cardViewColor"
+            android:text="@string/total"/>
+
+        <TextView
+            android:id="@+id/tv_count_all_rating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".05"
+            android:text="1"/>
 
         <LinearLayout
             style="@style/grayLine"/>
 
         <ImageButton
-            android:background="@color/cardViewColor"
-            android:src="@drawable/ic_like"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".34"/>
+            android:layout_weight=".28"
+            android:background="@color/cardViewColor"
+            android:src="@drawable/ic_like"/>
+
+        <TextView
+            android:id="@+id/tv_count_like_rating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".05"
+            android:text="1"/>
 
         <LinearLayout
             style="@style/grayLine"/>
 
         <ImageButton
-            android:background="@color/cardViewColor"
-            android:src="@drawable/ic_dislike"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight=".33"/>
+            android:layout_weight=".28"
+            android:background="@color/cardViewColor"
+            android:src="@drawable/ic_dislike"/>
+
+        <TextView
+            android:id="@+id/tv_count_dislike_rating"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".05"
+            android:text="1"/>
     </LinearLayout>
 
     <FrameLayout
-        android:background="@color/cardViewColor"
+        android:id="@+id/container_recycler_view_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/cardViewColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout_header_comment">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view_comment"
@@ -65,7 +92,6 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="193dp"/>
     </FrameLayout>
-
 
 
 </android.support.constraint.ConstraintLayout>

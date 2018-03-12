@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vagapov.amir.ufaburgersapp.R;
-import com.vagapov.amir.ufaburgersapp.model.Burgers;
 import com.vagapov.amir.ufaburgersapp.model.Place;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.FragmentClickOpenPlaceInterface;
 
 import java.util.ArrayList;
 

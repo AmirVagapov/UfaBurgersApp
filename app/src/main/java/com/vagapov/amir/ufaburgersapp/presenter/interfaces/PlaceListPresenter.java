@@ -1,9 +1,8 @@
-package com.vagapov.amir.ufaburgersapp.presenter;
+package com.vagapov.amir.ufaburgersapp.presenter.interfaces;
 
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-import com.vagapov.amir.ufaburgersapp.model.Place;
-import com.vagapov.amir.ufaburgersapp.view.PlaceListView;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.PlaceListView;
 
 public interface PlaceListPresenter extends MvpPresenter<PlaceListView>{
 

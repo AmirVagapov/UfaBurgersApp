@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.vagapov.amir.ufaburgersapp.view.FragmentClickOpenPlaceInterface;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.FragmentClickOpenPlaceInterface;
 import com.vagapov.amir.ufaburgersapp.view.MapFragment;
 import com.vagapov.amir.ufaburgersapp.view.PlaceListFragment;
 
@@ -152,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void openFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().addToBackStack(null).replace(R.id.container, fragment).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(null).replace(R.id.container, fragment)
+                .commit();
     }
 }

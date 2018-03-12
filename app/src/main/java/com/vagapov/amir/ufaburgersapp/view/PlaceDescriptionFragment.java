@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -25,19 +23,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
-import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateFragment;
-import com.hannesdorfmann.mosby.mvp.viewstate.ViewState;
-import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.vagapov.amir.ufaburgersapp.R;
-import com.vagapov.amir.ufaburgersapp.model.Comment;
 import com.vagapov.amir.ufaburgersapp.model.Place;
-import com.vagapov.amir.ufaburgersapp.presenter.PlaceDescriptionPresenter;
-import com.vagapov.amir.ufaburgersapp.presenter.PlaceDescriptionPresenterImpl;
-
-import org.w3c.dom.Text;
+import com.vagapov.amir.ufaburgersapp.module.interfaces.DaggerPlaceDescriptionComponent;
+import com.vagapov.amir.ufaburgersapp.module.interfaces.PlaceDescriptionComponent;
+import com.vagapov.amir.ufaburgersapp.module.PlaceModule;
+import com.vagapov.amir.ufaburgersapp.presenter.interfaces.PlaceDescriptionPresenter;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.FragmentClickOpenPlaceInterface;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.PlaceDescriptionView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +41,7 @@ import butterknife.ButterKnife;
 public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
         PlaceDescriptionPresenter> implements View.OnClickListener, PlaceDescriptionView {
 
-    private static final String URI_MAP = "geo:";
+
     private static final String BUNDLE_PLACE = "place";
     private Place place;
     private GoogleMap map;
@@ -74,6 +69,9 @@ public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
     ImageView placesPhoto;
 
     private MenuItem menuItemLike;
+
+
+    private PlaceDescriptionComponent component;
 
 
     public static PlaceDescriptionFragment newInstance(Place place) {
@@ -117,7 +115,7 @@ public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
     @Override
     public PlaceDescriptionPresenter createPresenter() {
         Log.d("TAGF", "createPresenter");
-        return new PlaceDescriptionPresenterImpl(place, openFragmentInterface);
+        return component.presenter();
     }
 
     @Override
@@ -127,6 +125,10 @@ public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
         setHasOptionsMenu(true);
         Bundle arg = getArguments();
         place = (Place) arg.getSerializable(BUNDLE_PLACE);
+        component = DaggerPlaceDescriptionComponent
+                .builder()
+                .placeModule(new PlaceModule(place)).build();
+        component.inject(this);
     }
 
     @Override
@@ -142,7 +144,8 @@ public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         Log.d("TAGF", "onCreateView");
         return inflater.inflate(R.layout.fragment_place_description, container, false);
     }
@@ -163,8 +166,7 @@ public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
                     .target(place.getLatLng()).zoom(13).build();
             map.animateCamera(CameraUpdateFactory.newCameraPosition(position));
             map.setOnMapClickListener(latLng -> {
-                String uriLocation = createUriLocation(place.getLatLng());
-                Uri intentUri = Uri.parse(uriLocation);
+                Uri intentUri = Uri.parse(component.uriLocation());
                 Intent intent = new Intent(Intent.ACTION_VIEW, intentUri);
                 intent.setPackage(getString(R.string.google_intent_package));
                 if(intent.resolveActivity(getActivity().getPackageManager()) != null){
@@ -175,16 +177,6 @@ public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
 
     }
 
-    @NonNull
-    private String createUriLocation(LatLng location) {
-        StringBuilder builder = new StringBuilder(URI_MAP);
-        builder.append(location.latitude)
-                .append(", ")
-                .append(location.longitude)
-                .append("?q=")
-                .append(place.getName());
-        return builder.toString();
-    }
 
     @Override
     public void onDestroy() {
@@ -196,7 +188,7 @@ public class PlaceDescriptionFragment extends MvpFragment<PlaceDescriptionView,
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.left_comment_button:
-                presenter.openCommentFragment(CommentFragment.newInstance(place));
+                openFragmentInterface.openFragment(CommentFragment.newInstance(place));
                 break;
             case R.id.item_description_like:
                 presenter.like();

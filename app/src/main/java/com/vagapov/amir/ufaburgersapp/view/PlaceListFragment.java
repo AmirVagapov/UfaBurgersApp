@@ -1,6 +1,10 @@
 package com.vagapov.amir.ufaburgersapp.view;
 
+import android.content.Context;
+import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.NestedScrollView;
@@ -21,11 +25,14 @@ import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.vagapov.amir.ufaburgersapp.R;
 import com.vagapov.amir.ufaburgersapp.model.Place;
-import com.vagapov.amir.ufaburgersapp.model.PlacesModelImpl;
-import com.vagapov.amir.ufaburgersapp.presenter.PlaceListPresenter;
-import com.vagapov.amir.ufaburgersapp.presenter.PlaceListPresenterImpl;
+import com.vagapov.amir.ufaburgersapp.module.interfaces.DaggerPlaceListComponent;
+import com.vagapov.amir.ufaburgersapp.module.interfaces.PlaceListComponent;
+import com.vagapov.amir.ufaburgersapp.presenter.interfaces.PlaceListPresenter;
+import com.vagapov.amir.ufaburgersapp.view.interfaces.PlaceListView;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +40,7 @@ import butterknife.Unbinder;
 
 
 public class PlaceListFragment extends MvpLceViewStateFragment<NestedScrollView, ArrayList<Place>,
-PlaceListView, PlaceListPresenter> implements PlaceListView{
+PlaceListView, PlaceListPresenter> implements PlaceListView {
 
     @BindView(R.id.top_recycler_view)
     RecyclerView topRecyclerList;
@@ -45,7 +52,10 @@ PlaceListView, PlaceListPresenter> implements PlaceListView{
     private PlacesAdapter adapterAll;
     private PlacesAdapter adapterTop;
     private PlacesAdapter adapterFav;
+    private PlaceListComponent component;
 
+    @Inject
+    PlacesAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +63,8 @@ PlaceListView, PlaceListPresenter> implements PlaceListView{
         Log.d("TAG", "onCreate");
         setHasOptionsMenu(true);
         setRetainInstance(true);
+        component = DaggerPlaceListComponent.builder().build();
+        component.inject(this);
     }
 
     @Nullable
@@ -73,9 +85,9 @@ PlaceListView, PlaceListPresenter> implements PlaceListView{
     }
 
     private void createRecyclerView() {
-        adapterAll = new PlacesAdapter();
-        adapterTop = new PlacesAdapter();
-        adapterFav = new PlacesAdapter();
+        adapterAll = component.adapter();
+        adapterTop = component.adapter();
+        adapterFav = component.adapter();
         topRecyclerList.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.HORIZONTAL, false));
 
@@ -83,7 +95,11 @@ PlaceListView, PlaceListPresenter> implements PlaceListView{
         favouriteRecyclerList.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.HORIZONTAL, false));
         favouriteRecyclerList.setAdapter(adapterFav);
-        allRecyclerList.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            allRecyclerList.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        }else {
+            allRecyclerList.setLayoutManager(new GridLayoutManager(getActivity(), 5));
+        }
         allRecyclerList.setAdapter(adapterAll);
         allRecyclerList.setOnFlingListener(new RecyclerView.OnFlingListener() {
             @Override
@@ -131,7 +147,7 @@ PlaceListView, PlaceListPresenter> implements PlaceListView{
     @Override
     public PlaceListPresenter createPresenter() {
         Log.d("TAG", "createPresenter");
-        return new PlaceListPresenterImpl(new PlacesModelImpl());
+        return component.presenter();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.vagapov.amir.ufaburgersapp.view;
+package com.vagapov.amir.ufaburgersapp.view.interfaces;
 
 import com.hannesdorfmann.mosby.mvp.MvpView;
 

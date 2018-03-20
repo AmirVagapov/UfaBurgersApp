@@ -23,8 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.vagapov.amir.ufaburgersapp.R;
 import com.vagapov.amir.ufaburgersapp.model.Place;
 import com.vagapov.amir.ufaburgersapp.model.PlacesModelImpl;
-import com.vagapov.amir.ufaburgersapp.module.interfaces.DaggerMapComponent;
 import com.vagapov.amir.ufaburgersapp.module.MapModule;
+import com.vagapov.amir.ufaburgersapp.module.interfaces.DaggerMapComponent;
 import com.vagapov.amir.ufaburgersapp.module.interfaces.MapComponent;
 import com.vagapov.amir.ufaburgersapp.map_delegate.MapDelegate;
 import com.vagapov.amir.ufaburgersapp.view.interfaces.FragmentClickOpenPlaceInterface;
@@ -182,7 +182,7 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
     @Override
     public void onDetach() {
         super.onDetach();
-        delegate.tryToUnsubscribe();
+        delegate.unsubscribeAll();
     }
 
     @Override

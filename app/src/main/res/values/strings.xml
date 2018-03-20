@@ -30,4 +30,8 @@
     <string name="your_location">Вы здесь</string>
     <string name="total">Всего</string>
     <string name="give_more_informations">Узнать подробнее</string>
+    <string name="settings">Настройки</string>
+    <string name="notifications_on">Включить уведомления</string>
+    <string name="burger_is_near">Загляните в бургерную недалеко от Вас</string>
+    <string name="burgers_name_near">Рядом с вами находится </string>
 </resources>

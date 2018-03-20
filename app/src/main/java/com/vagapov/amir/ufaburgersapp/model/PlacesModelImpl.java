@@ -40,6 +40,7 @@ public class PlacesModelImpl implements PlacesModel {
         mockList.add(new Burgers("Morris", new LatLng(54.7388, 55.9721), 1.8f));
         mockList.add(new Burgers("Harat's", new LatLng(54.7388, 55.9721), 5.5f));
         mockList.add(new Burgers("MarcoPolo", new LatLng(54.7388, 55.9721), 6.9f));
+        mockList.add(new Burgers("Address", new LatLng(54.7752, 56.0233), 9.9f));
         for (int i = 0; i < mockList.size(); i++) {
             if(i % 3 == 0){
                 mockList.get(i).setFavourite(true);

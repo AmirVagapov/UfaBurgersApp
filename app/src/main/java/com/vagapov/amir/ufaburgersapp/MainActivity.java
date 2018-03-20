@@ -2,6 +2,7 @@ package com.vagapov.amir.ufaburgersapp;
 
 
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.model.LatLng;
 import com.vagapov.amir.ufaburgersapp.map_service.MapService;
 import com.vagapov.amir.ufaburgersapp.model.Place;
 import com.vagapov.amir.ufaburgersapp.module.interfaces.DaggerMapServiceComponent;
@@ -34,6 +36,8 @@ import com.vagapov.amir.ufaburgersapp.view.SettingsFragment;
 import com.vagapov.amir.ufaburgersapp.view.interfaces.FragmentClickOpenPlaceInterface;
 import com.vagapov.amir.ufaburgersapp.view.MapFragment;
 import com.vagapov.amir.ufaburgersapp.view.PlaceListFragment;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,32 +58,24 @@ public class MainActivity extends AppCompatActivity implements
     private MapServiceComponent component;
 
 
+
     @IdRes
     public int getFragmentContainer() {
         return R.id.container;
     }
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        Intent i = getIntent();
-//        Place place = (Place) i.getSerializableExtra(MapService.PLACE);
-//        if(place != null) {
-//            Log.d("LOCATIONSERVICE", place.getName());
-//            openFragment(PlaceDescriptionFragment
-//                    .newInstance(place));
-//        }
-//    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("LOCATIONSERVICE", "OnActivityResult");
-        if(requestCode == 0){
-            Place place = (Place) data.getSerializableExtra(MapService.PLACE);
+    private void checkIntent() {
+        Place place = (Place) getIntent().getSerializableExtra(MapService.PLACE);
+        double lat = getIntent().getDoubleExtra(MapService.LATITUDE, 0);
+        double lon = getIntent().getDoubleExtra(MapService.LONGITUDE, 0);
+        if(place != null) {
+            place.setLatLng(new LatLng(lat, lon));
             openFragment(PlaceDescriptionFragment
                     .newInstance(place));
         }
     }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,17 +87,16 @@ public class MainActivity extends AppCompatActivity implements
         initDrawerLayout();
         initGoogleApi();
 
-
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(getFragmentContainer());
-
-
 
         if(fragment == null){
             fragment = PlaceListFragment.newInstance();
             fm.beginTransaction().replace(getFragmentContainer(), fragment).commit();
         }
+        checkIntent();
     }
+
 
     private void checkService() {
         component.service().setServiceAlarm(this, QueryPreferences.isNotifiactionsOn(this));

@@ -1,12 +1,15 @@
 package com.vagapov.amir.ufaburgersapp.view;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
@@ -38,6 +42,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.vagapov.amir.ufaburgersapp.view.MapFragment.LOCATION_PERMISSIONS;
+import static com.vagapov.amir.ufaburgersapp.view.MapFragment.REQUEST_LOCATION_PERMISSION;
+
 
 public class PlaceListFragment extends MvpLceViewStateFragment<NestedScrollView, ArrayList<Place>,
 PlaceListView, PlaceListPresenter> implements PlaceListView {
@@ -54,6 +61,7 @@ PlaceListView, PlaceListPresenter> implements PlaceListView {
     private PlacesAdapter adapterFav;
     private PlaceListComponent component;
 
+
     @Inject
     PlacesAdapter adapter;
 
@@ -65,6 +73,26 @@ PlaceListView, PlaceListPresenter> implements PlaceListView {
         setRetainInstance(true);
         component = DaggerPlaceListComponent.builder().build();
         component.inject(this);
+        if(!checkPermission()) {
+            requestPermissions(LOCATION_PERMISSIONS, REQUEST_LOCATION_PERMISSION);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION && checkPermission()) {
+            Toast.makeText(getActivity(),
+                            getResources().getString(R.string.geo_is_allow),
+                            Toast.LENGTH_SHORT)
+                    .show();
+        } else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(getActivity(), LOCATION_PERMISSIONS[0]);
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 
     @Nullable

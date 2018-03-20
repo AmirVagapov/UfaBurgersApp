@@ -1,14 +1,19 @@
 package com.vagapov.amir.ufaburgersapp.view;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
@@ -32,6 +37,7 @@ public class SettingsFragment extends MvpFragment
 
     private MapServiceComponent component;
 
+    @NonNull
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
@@ -43,7 +49,13 @@ public class SettingsFragment extends MvpFragment
         component = DaggerMapServiceComponent.create();
         ButterKnife.bind(this, view);
         setCheckBox();
-        checkBox.setOnCheckedChangeListener(this);
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(getActivity(), R.string.need_geo_permission, Toast.LENGTH_SHORT).show();
+            checkBox.setEnabled(false);
+        }else {
+            checkBox.setOnCheckedChangeListener(this);
+        }
     }
 
     private void setCheckBox() {
@@ -66,11 +78,6 @@ public class SettingsFragment extends MvpFragment
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         QueryPreferences.setNotificationsOn(getActivity(), b);
-        if (b) {
-            Log.d("CHECKED", "ON");
-        } else {
-            Log.d("CHECKED", "OFF");
-        }
         component.service().setServiceAlarm(getActivity(), b);
     }
 }

@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -21,27 +22,27 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vagapov.amir.ufaburgersapp.R;
+import com.vagapov.amir.ufaburgersapp.map_delegate.MapDelegate;
 import com.vagapov.amir.ufaburgersapp.model.Place;
 import com.vagapov.amir.ufaburgersapp.model.PlacesModelImpl;
 import com.vagapov.amir.ufaburgersapp.module.MapModule;
 import com.vagapov.amir.ufaburgersapp.module.interfaces.DaggerMapComponent;
 import com.vagapov.amir.ufaburgersapp.module.interfaces.MapComponent;
-import com.vagapov.amir.ufaburgersapp.map_delegate.MapDelegate;
 import com.vagapov.amir.ufaburgersapp.view.interfaces.FragmentClickOpenPlaceInterface;
 import com.vagapov.amir.ufaburgersapp.view.interfaces.MapMarkerLoaderInterface;
 
 public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoWindowClickListener,
-        MapMarkerLoaderInterface{
+        MapMarkerLoaderInterface {
 
     private GoogleMap map;
     private Location currentLocation;
     private PermissionLocationDialogFragment permissionDialog;
     private FragmentClickOpenPlaceInterface mFragmentClickOpenPlaceInterface;
-    private static final String[] LOCATION_PERMISSIONS = new String[]{
+    public static final String[] LOCATION_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
-    private static final int REQUEST_LOCATION_PERMISSION = 0;
+    public static final int REQUEST_LOCATION_PERMISSION = 0;
     private MapDelegate delegate;
 
     @NonNull
@@ -61,17 +62,18 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
         super.onCreate(bundle);
         setRetainInstance(true);
         MapComponent component = DaggerMapComponent
-                .builder().mapModule(new MapModule(this, new PlacesModelImpl())).build();
+                .builder()
+                .mapModule(new MapModule(this, new PlacesModelImpl()))
+                .build();
         component.inject(this);
         delegate = component.delegate();
         createPermissionDialog();
-        checkPermissions();
 
         getMapAsync(googleMap -> {
             map = googleMap;
             map.setOnInfoWindowClickListener(this);
             map.getUiSettings().setZoomControlsEnabled(true);
-            getLocation();
+            checkPermissions();
         });
 
     }
@@ -123,7 +125,7 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
     }
 
     @Override
-    public void addMarkers(Place place){
+    public void addMarkers(Place place) {
         MarkerOptions marker = new MarkerOptions()
                 .position(place.getLatLng())
                 .title(place.getName())
@@ -133,7 +135,7 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
     }
 
     @Override
-    public void showErrorLoading(Throwable throwable){
+    public void showErrorLoading(Throwable throwable) {
         Toast.makeText(getActivity(),
                 throwable.getMessage(),
                 Toast.LENGTH_SHORT).show();
@@ -142,18 +144,22 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
 
     @Override
     public void postMarkers() {
-        LatLng myLocation = new LatLng(currentLocation.getLatitude(),
-                currentLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions()
-                .position(myLocation)
-                .title(getString(R.string.your_location))
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-                .zIndex(1.0f);
-        Marker marker = map.addMarker(markerOptions);
-        marker.showInfoWindow();
-        CameraUpdate cameraUpdate = CameraUpdateFactory
-                .newLatLngZoom(myLocation, 13.0f);
-        map.animateCamera(cameraUpdate);
+        if(currentLocation == null){
+            getLocation();
+        } else {
+            LatLng myLocation = new LatLng(currentLocation.getLatitude(),
+                    currentLocation.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .position(myLocation)
+                    .title(getString(R.string.your_location))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                    .zIndex(1.0f);
+            Marker marker = map.addMarker(markerOptions);
+            marker.showInfoWindow();
+            CameraUpdate cameraUpdate = CameraUpdateFactory
+                    .newLatLngZoom(myLocation, 13.0f);
+            map.animateCamera(cameraUpdate);
+        }
         Toast.makeText(getActivity(), R.string.location_loaded, Toast.LENGTH_SHORT).show();
     }
 
@@ -192,7 +198,7 @@ public class MapFragment extends SupportMapFragment implements GoogleMap.OnInfoW
     }
 
     @Override
-    public void openPlace(Place place){
+    public void openPlace(Place place) {
         mFragmentClickOpenPlaceInterface
                 .openFragment(PlaceDescriptionFragment.newInstance(place));
     }

@@ -34,4 +34,6 @@
     <string name="notifications_on">Включить уведомления</string>
     <string name="burger_is_near">Загляните в бургерную недалеко от Вас</string>
     <string name="burgers_name_near">Рядом с вами находится </string>
+    <string name="need_geo_permission">Необходимо разрешения на определение местоположения</string>
+    <string name="geo_is_allow">Разрешение на определение геолокации получено</string>
 </resources>

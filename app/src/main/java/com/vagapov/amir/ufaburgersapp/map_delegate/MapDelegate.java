@@ -43,7 +43,8 @@ public class MapDelegate {
          subscriptionLoadPlace = model.getPlaces()
                  .filter( place -> place.getName().equals(title))
                  .first()
-                 .subscribe(place -> loader.openPlace(place));
+                 .subscribe(place -> loader.openPlace(place),
+                         throwable -> loader.showErrorLoading(throwable));
          subscriptionList.add(subscriptionLoadPlace);
     }
 
@@ -53,13 +54,18 @@ public class MapDelegate {
         return subscription != null && !subscription.isUnsubscribed();
     }
 
-    public void tryToUnsubscribe(Subscription subscription){
+    private void tryToUnsubscribe(Subscription subscription){
+        if(subscriptionList == null){
+            subscriptionList = new SubscriptionList();
+        }
         if(isSubscribed(subscription)){
             subscription.unsubscribe();
         }
     }
 
     public void unsubscribeAll(){
-        subscriptionList.unsubscribe();
+        if(subscriptionList != null) {
+            subscriptionList.unsubscribe();
+        }
     }
 }

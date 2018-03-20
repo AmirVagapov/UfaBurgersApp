@@ -35,11 +35,12 @@ public class MapService extends JobIntentService {
     private PlacesModel model;
     private Location myLocation;
     private Subscription subscription;
-    private Notification notification;
     public static final String REQUEST_CODE_INTENT = "request_code";
     public static final String NOTIFICATION = "notification";
     public static final String ACTION_SHOW_NOTIFICATION = "com.vagapov.amir.burgersapp.SHOW_NOTIFICATION";
     public static final String PLACE = "place";
+    public static final String LATITUDE = "latitude";
+    public static final String LONGITUDE = "longitude";
 
     public static Intent newIntent(Context context) {
         return new Intent(context, MapService.class);
@@ -57,27 +58,41 @@ public class MapService extends JobIntentService {
         subscription = loadNearestPlaces(myLocationObservable)
                 .subscribe(place -> {
                             Log.d("LOCATIONSERVICE", "OBSER LOCATION LOADED " + place.getName());
-                            Intent i = MainActivity.newIntent(this);
-                            i.putExtra(PLACE, place);
-                            PendingIntent pi = PendingIntent.getActivity(this, 0, i, 0);
-                            notification = new Notification.Builder(this)
-                                    .setTicker(getResources().getString(R.string.burger_is_near))
-                                    .setSmallIcon(R.drawable.app_icon_burger)
-                                    .setContentTitle(getResources().getString(R.string.burger_is_near))
-                                    .setContentIntent(pi)
-                                    .setContentText(getResources().getString(R.string.burgers_name_near) + " " + place.getName())
-                                    .setAutoCancel(true)
-                                    .build();
-
-                            Intent intent1 = new Intent(ACTION_SHOW_NOTIFICATION);
-                            intent1.putExtra(REQUEST_CODE_INTENT, 100);
-                            intent1.putExtra(NOTIFICATION, notification);
-                            sendOrderedBroadcast(intent1, null, null, null, Activity.RESULT_OK, null, null);
+                            Intent i = createIntent(place);
+                            PendingIntent pi = PendingIntent
+                                    .getActivity(this, 0,
+                                            i, PendingIntent.FLAG_CANCEL_CURRENT);
+                            sendBroadcast(place, pi);
                         },
                         throwable -> Log.d("LOCATIONSERVICE",
                                 "OBSERVABLE ERR " + throwable + " " + throwable.getMessage()));
 
 
+    }
+
+    private void sendBroadcast(Place place, PendingIntent pi) {
+        Notification notification = new Notification.Builder(this)
+                .setTicker(getResources().getString(R.string.burger_is_near))
+                .setSmallIcon(R.drawable.app_icon_burger)
+                .setContentTitle(getResources().getString(R.string.burger_is_near))
+                .setContentIntent(pi)
+                .setContentText(getResources().getString(R.string.burgers_name_near) + " " + place.getName())
+                .setAutoCancel(true)
+                .build();
+
+        Intent intent = new Intent(ACTION_SHOW_NOTIFICATION);
+        intent.putExtra(REQUEST_CODE_INTENT, 100);
+        intent.putExtra(NOTIFICATION, notification);
+        sendOrderedBroadcast(intent, null, null,
+                null, Activity.RESULT_OK, null, null);
+    }
+
+    private Intent createIntent(Place place) {
+        Intent i = MainActivity.newIntent(this);
+        i.putExtra(PLACE, place);
+        i.putExtra(LONGITUDE, place.getLatLng().longitude);
+        i.putExtra(LATITUDE, place.getLatLng().latitude);
+        return i;
     }
 
     public void setServiceAlarm(Context context, boolean isOn) {
@@ -120,13 +135,6 @@ public class MapService extends JobIntentService {
                 = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return null;
         }
         fusedLocationProviderClient
@@ -134,7 +142,6 @@ public class MapService extends JobIntentService {
                 .addOnFailureListener(e -> Log.d("LOCATIONSERVICE", "ERROR LOAD LOC" + e.getMessage()))
                 .addOnSuccessListener(location -> {
                     myLocation = location;
-                    Log.d("LOCATIONSERVICE", "loaded my loc. lat " + myLocation.getLatitude() + " lon " + myLocation.getLongitude());
                 });
         try {
             TimeUnit.MILLISECONDS.sleep(200);
